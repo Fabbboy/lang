@@ -8,7 +8,7 @@ pub struct StringValue {
 }
 
 impl StringValue {
-  fn new(value: String) -> Self {
+  pub fn new(value: String) -> Self {
     StringValue { value }
   }
 

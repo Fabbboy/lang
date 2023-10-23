@@ -30,9 +30,11 @@ impl Lexer {
         TokenT::NEWLINE,
         TokenT::COMMENT,
         TokenT::TYPE,
+        TokenT::MUT,
         TokenT::IDENTIFIER,
         TokenT::INTEGER,
         TokenT::FLOAT,
+        TokenT::STRING,
         TokenT::EQUALS,
         TokenT::ASSIGN,
       ] {
@@ -46,7 +48,7 @@ impl Lexer {
             ));
 
             let len = value.len();
-            source = &source[len..]; // Update the source string
+            source = &source[len..];
 
             if t == TokenT::NEWLINE {
               line += 1;

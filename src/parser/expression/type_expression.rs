@@ -1,9 +1,11 @@
 use super::Expression;
 #[derive(Debug)]
 pub enum Type {
+  Byte,
   Int,
   Float,
   String,
+  Void
 }
 #[derive(Debug)]
 pub struct TypeExpression {

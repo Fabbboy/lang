@@ -6,15 +6,15 @@ use super::Statement;
 pub struct AssignStatement {
   pub variable_expr: Expression,
   pub value_expr: Expression,
-  pub is_const: bool,
+  pub is_mutable: bool,
 }
 
 impl AssignStatement {
-  fn new(variable_expr: Expression, value_expr: Expression, is_const: bool) -> Self {
+  pub fn new(variable_expr: Expression, value_expr: Expression, is_mutable: bool) -> Self {
     AssignStatement {
       variable_expr,
       value_expr,
-      is_const,
+      is_mutable,
     }
   }
 
@@ -22,8 +22,8 @@ impl AssignStatement {
     &self,
     variable_expr: Expression,
     value_expr: Expression,
-    is_const: bool,
+    is_mutable: bool,
   ) -> Statement {
-    Statement::Assign(AssignStatement::new(variable_expr, value_expr, is_const))
+    Statement::Assign(AssignStatement::new(variable_expr, value_expr, is_mutable))
   }
 }

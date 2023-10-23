@@ -11,7 +11,11 @@ impl Module {
   }
 
   pub fn add_statement(&mut self, statement: Statement) {
-    self.statements.as_mut().unwrap().push(statement);
+    //self.statements.as_mut().unwrap().push(statement);
+    match &mut self.statements {
+      Some(statements) => statements.push(statement),
+      None => self.statements = Some(vec![statement]),
+    }
   }
 
   pub fn get_statements(&mut self) -> &Vec<Statement> {

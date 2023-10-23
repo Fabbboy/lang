@@ -8,7 +8,7 @@ pub struct FloatValue {
 }
 
 impl FloatValue {
-  fn new(value: f32) -> Self {
+  pub fn new(value: f32) -> Self {
     FloatValue { value }
   }
 
