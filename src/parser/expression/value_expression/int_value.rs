@@ -2,7 +2,6 @@ use crate::parser::expression::Expression;
 
 use super::ValueExpression;
 
-
 #[derive(Debug)]
 pub struct IntValue {
   pub value: i32,

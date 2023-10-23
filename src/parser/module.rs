@@ -1,7 +1,7 @@
 use super::statement::Statement;
 
 #[derive(Debug)]
-pub struct Module{
+pub struct Module {
   pub statements: Option<Vec<Statement>>,
 }
 
@@ -11,10 +11,10 @@ impl Module {
   }
 
   pub fn add_statement(&mut self, statement: Statement) {
-    self.statements.unwrap().push(statement);
+    self.statements.as_mut().unwrap().push(statement);
   }
 
-  pub fn get_statements(&mut self) -> Vec<Statement> {
-    self.statements.unwrap()
+  pub fn get_statements(&mut self) -> &Vec<Statement> {
+    self.statements.as_ref().unwrap()
   }
 }

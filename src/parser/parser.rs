@@ -1,4 +1,4 @@
-use crate::lexer::{token::Token, codepos::CodePos, TokenT};
+use crate::lexer::{codepos::CodePos, token::Token, TokenT};
 
 use super::module::Module;
 
@@ -11,19 +11,19 @@ pub struct Parser {
 
 impl Parser {
   pub fn new(tokens: Vec<Token>) -> Self {
-    Parser { 
-      tokens, 
+    Parser {
+      tokens,
       module: Module::new(None),
       pos: 0,
       codepos: CodePos::zero(),
     }
   }
- 
+
   pub fn get_mut_module(&mut self) -> &mut Module {
     &mut self.module
   }
 
-  fn peek(&self , n: usize) -> Token {
+  fn peek(&self, n: usize) -> Token {
     if self.pos + n >= self.tokens.len() {
       return Token::zero();
     }
@@ -49,7 +49,7 @@ impl Parser {
     false
   }
 
-  fn consume_if_either (&mut self, token_type: Vec<TokenT>) -> bool {
+  fn consume_if_either(&mut self, token_type: Vec<TokenT>) -> bool {
     for token in token_type {
       if self.peek(0).token == token {
         self.consume();
@@ -59,10 +59,10 @@ impl Parser {
     false
   }
 
-  pub fn parse(&self)  {
+  pub fn parse(&mut self) {
     self.remove_all_comments();
     while self.pos < self.tokens.len() {
-       self.parse_statement();
+      self.parse_statement();
     }
   }
 
@@ -77,7 +77,7 @@ impl Parser {
     }
   }
 
-  fn parse_statement(&self) {
+  fn parse_statement(&mut self) {
     self.consume_if_either(vec![TokenT::NEWLINE, TokenT::WHITESPACE]);
     if self.peek(0).token == TokenT::COMMENT {
       return;

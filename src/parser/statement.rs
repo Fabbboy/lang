@@ -1,7 +1,7 @@
-pub mod mov_statement;
+pub mod variable_declaration;
 
 #[derive(Debug)]
 pub enum Statement {
   Nop(),
-  Mov(mov_statement::MovStatement),
+  VariableDeclaration(variable_declaration::VariableDeclaration),
 }
