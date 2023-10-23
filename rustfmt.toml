@@ -1,0 +1,4 @@
+tab_spaces = 2
+reorder_imports = true
+print_misformatted_file_names = true
+newline_style = "Auto"
