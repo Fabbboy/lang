@@ -1,7 +1,5 @@
 use crate::parser::expression::Expression;
 
-use super::Statement;
-
 #[derive(Debug)]
 pub struct AssignStatement {
   pub variable_expr: Expression,
@@ -16,14 +14,5 @@ impl AssignStatement {
       value_expr,
       is_mutable,
     }
-  }
-
-  fn statement(
-    &self,
-    variable_expr: Expression,
-    value_expr: Expression,
-    is_mutable: bool,
-  ) -> Statement {
-    Statement::Assign(AssignStatement::new(variable_expr, value_expr, is_mutable))
   }
 }

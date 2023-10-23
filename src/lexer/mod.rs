@@ -1,7 +1,5 @@
 use regex::Regex;
 
-use self::token::Token;
-
 pub mod codepos;
 pub mod lexer;
 pub mod token;
@@ -29,15 +27,6 @@ pub enum TokenT {
 }
 
 impl TokenT {
-  pub fn is_skip(&self) -> bool {
-    match self {
-      TokenT::WHITESPACE => true,
-      TokenT::NEWLINE => true,
-      TokenT::COMMENT => true,
-      _ => false,
-    }
-  }
-
   pub fn with_regex(&self) -> Vec<(Regex, TokenT)> {
     match self {
       TokenT::WHITESPACE => vec![(Regex::new(r"^ +").unwrap(), TokenT::WHITESPACE)],
@@ -60,18 +49,6 @@ impl TokenT {
 
       TokenT::EQUALS => vec![(Regex::new(r"^==").unwrap(), TokenT::EQUALS)],
       TokenT::ASSIGN => vec![(Regex::new(r"^(=|\\+=|-=|\\*=|/=)").unwrap(), TokenT::ASSIGN)],
-      _ => vec![],
-    }
-  }
-
-  pub fn is_value_required(&self) -> bool {
-    match self {
-      TokenT::WHITESPACE => false,
-      TokenT::NEWLINE => false,
-      TokenT::COMMENT => false,
-      TokenT::EQUALS => false,
-      TokenT::MUT => false,
-      _ => true,
     }
   }
 }

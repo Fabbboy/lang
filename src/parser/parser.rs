@@ -1,9 +1,11 @@
-use crate::lexer::{codepos::CodePos, token::Token, TokenT};
+use crate::lexer::{token::Token, TokenT};
 
 use super::{
   expression::{
     type_expression::{Type, TypeExpression},
-    value_expression::{int_value::IntValue, ValueExpression, float_value::FloatValue, string_value::StringValue},
+    value_expression::{
+      float_value::FloatValue, int_value::IntValue, string_value::StringValue, ValueExpression,
+    },
     variable_expression::VariableExpression,
     Expression,
   },
@@ -195,9 +197,9 @@ impl Parser {
       }
       TokenT::STRING => {
         let value = self.peek(0).value.as_ref().unwrap().clone();
-        return Some(Expression::Value(ValueExpression::String(StringValue::new(
-          value,
-        ))));
+        return Some(Expression::Value(ValueExpression::String(
+          StringValue::new(value),
+        )));
       }
       TokenT::TYPE => {
         let value = self.parse_type();

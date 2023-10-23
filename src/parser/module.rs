@@ -17,8 +17,4 @@ impl Module {
       None => self.statements = Some(vec![statement]),
     }
   }
-
-  pub fn get_statements(&mut self) -> &Vec<Statement> {
-    self.statements.as_ref().unwrap()
-  }
 }
