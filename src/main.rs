@@ -6,8 +6,10 @@ use parser::parser::Parser;
 
 fn main() {
   let mut lexer = Lexer::new();
-  lexer.lex("mov rax, 1\nnop");
+  lexer.lex("int asdasd = 123");
+  println!("{:#?}", lexer.tokens);
 
-  /*let mut parser = Parser::new(lexer.tokens);
-  println!("{}", parser.parse());*/
+  let mut parser = Parser::new(lexer.tokens);
+  parser.parse();
+  println!("{:#?}", parser.module);
 }

@@ -29,14 +29,12 @@ impl Lexer {
         TokenT::WHITESPACE,
         TokenT::NEWLINE,
         TokenT::COMMENT,
-        TokenT::NOP,
-        TokenT::MOV,
         TokenT::TYPE,
-        TokenT::INT,
+        TokenT::IDENTIFIER,
+        TokenT::INTEGER,
         TokenT::FLOAT,
-        TokenT::STRING,
-        TokenT::GPREGISTER,
-        TokenT::SPECIALREGISTER,
+        TokenT::EQUALS,
+        TokenT::ASSIGN,
       ] {
         for (regex, t) in token_type.with_regex() {
           if let Some(m) = regex.find(source) {

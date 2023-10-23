@@ -1,7 +1,7 @@
-pub mod variable_declaration;
+pub mod assign_statement;
 
 #[derive(Debug)]
 pub enum Statement {
   Nop(),
-  VariableDeclaration(variable_declaration::VariableDeclaration),
+  Assign(assign_statement::AssignStatement),
 }

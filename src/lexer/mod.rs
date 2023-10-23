@@ -14,16 +14,16 @@ pub enum TokenT {
   COMMENT,
 
   //Keywords
-  MOV,
-  NOP,
-  TYPE, //=> (byte, word, dword, float) => every type is signed we will automaticly insert unsigneds
+  TYPE,
 
-  //Values
-  GPREGISTER,
-  SPECIALREGISTER,
-  INT,
+  //Value
+  IDENTIFIER,
+  INTEGER,
   FLOAT,
-  STRING,
+
+  //Symbols
+  EQUALS,
+  ASSIGN,
 }
 
 impl TokenT {
@@ -40,26 +40,22 @@ impl TokenT {
     match self {
       TokenT::WHITESPACE => vec![(Regex::new(r"^\s+").unwrap(), TokenT::WHITESPACE)],
       TokenT::NEWLINE => vec![(Regex::new(r"^\n+").unwrap(), TokenT::NEWLINE)],
-      TokenT::COMMENT => vec![(Regex::new(r"^//.*").unwrap(), TokenT::COMMENT)],
+      TokenT::COMMENT => vec![(Regex::new(r"^%.*%").unwrap(), TokenT::COMMENT)],
 
-      TokenT::NOP => vec![(Regex::new(r"^nop").unwrap(), TokenT::NOP)],
-      TokenT::MOV => vec![(Regex::new(r"^mov").unwrap(), TokenT::MOV)],
       TokenT::TYPE => vec![(
-        Regex::new(r"^(byte|word|dword|float)").unwrap(),
+        Regex::new(r"^byte|int|float|str|void").unwrap(),
         TokenT::TYPE,
       )],
 
-      TokenT::INT => vec![(Regex::new(r"^\d+").unwrap(), TokenT::INT)],
-      TokenT::FLOAT => vec![(Regex::new(r"^\d+\.\d+").unwrap(), TokenT::FLOAT)],
-      TokenT::STRING => vec![(Regex::new(r#"^\".*\""#).unwrap(), TokenT::STRING)],
-      TokenT::GPREGISTER => vec![(
-        Regex::new(r"^(r1|r2|r3|r4|r5)").unwrap(),
-        TokenT::GPREGISTER,
+      TokenT::IDENTIFIER => vec![(
+        Regex::new(r"^[a-zA-Z_][a-zA-Z0-9_]*").unwrap(),
+        TokenT::IDENTIFIER,
       )],
-      TokenT::SPECIALREGISTER => vec![(
-        Regex::new(r"^(ip|sp|bp|flags)").unwrap(),
-        TokenT::SPECIALREGISTER,
-      )],
+      TokenT::INTEGER => vec![(Regex::new(r"^[0-9]+").unwrap(), TokenT::INTEGER)],
+      TokenT::FLOAT => vec![(Regex::new(r"^[0-9]+\.[0-9]+").unwrap(), TokenT::FLOAT)],
+
+      TokenT::EQUALS => vec![(Regex::new(r"^==").unwrap(), TokenT::EQUALS)],
+      TokenT::ASSIGN => vec![(Regex::new(r"^(=|\\+=|-=|\\*=|/=)").unwrap(), TokenT::ASSIGN)],
       _ => vec![],
     }
   }
@@ -69,7 +65,7 @@ impl TokenT {
       TokenT::WHITESPACE => false,
       TokenT::NEWLINE => false,
       TokenT::COMMENT => false,
-      TokenT::NOP => false,
+      TokenT::EQUALS => false,
       _ => true,
     }
   }
