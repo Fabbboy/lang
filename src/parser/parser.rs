@@ -108,6 +108,14 @@ impl Parser {
           eprintln!("Error: Failed to parse assignment");
         }
       }
+
+      TokenT::DOLLAR => {
+        if let Some(stmt) = self.parse_re_assignment() {
+          self.module.add_statement(stmt);
+        } else {
+          eprintln!("Error: Failed to parse assignment");
+        }
+      }
       _ => {
         eprintln!(
           "Error: Unexpected token {:?} at {:?}",
@@ -120,11 +128,6 @@ impl Parser {
   fn parse_assignment(&mut self) -> Option<Statement> {
     self.pos -= 1;
     let type_expr = self.parse_type();
-    if type_expr.is_none() {
-      eprintln!("Error: Expected type at {:?}", self.peek(0).pos);
-      return None;
-    }
-    let type_expr = type_expr.unwrap();
     self.consume();
     let t = self.consume_if_or(TokenT::IDENTIFIER, TokenT::MUT);
     let mut mutable = false;
@@ -150,7 +153,11 @@ impl Parser {
       return None;
     };
 
-    let variable_expr = Expression::Variable(VariableExpression::new(name, Box::from(type_expr)));
+    let mut variable_expr = Expression::Variable(VariableExpression::new(name.clone(), None));
+    if type_expr.is_some(){
+      let type_expr = type_expr.unwrap();
+      variable_expr = Expression::Variable(VariableExpression::new(name, Some(Box::from(type_expr))));
+    }
 
     if !self.consume_if(TokenT::ASSIGN) {
       eprintln!("Error: Expected ASSIGN at {:?}", self.peek(0).pos);
@@ -208,11 +215,38 @@ impl Parser {
         let value = self.peek(0).value.as_ref().unwrap().clone();
         return Some(Expression::Variable(VariableExpression::new(
           value.to_string(),
-          Box::from(Expression::Type(TypeExpression::new(Type::Void))),
+          None,
         )));
       }
 
       _ => todo!("Not implemented for {:?}", current_token.token),
+    }
+  }
+
+  fn parse_re_assignment(&mut self) -> Option<Statement>{
+    let current_token = self.peek(0);
+    let varname = current_token.value.as_ref().unwrap().clone();
+    self.consume();
+    match self.peek(0).token {
+      TokenT::ASSIGN => {
+        self.consume();
+        let value = self.parse_value();
+        if value.is_none() {
+          eprintln!("Error: Expected value at {:?}", self.peek(0).pos);
+          return None;
+        }
+        let value = value.unwrap();
+        self.consume();
+        return Some(Statement::Assign(AssignStatement::new(
+          Expression::Variable(VariableExpression::new(varname, None)),
+          value,
+          false,
+        )));
+      }
+      _ => {
+        eprintln!("Error: Expected ASSIGN at {:?}", self.peek(0).pos);
+        return None;
+      }
     }
   }
 

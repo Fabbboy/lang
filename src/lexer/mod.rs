@@ -17,7 +17,6 @@ pub enum TokenT {
 
   //Value
   IDENTIFIER,
-  BYTE,
   INTEGER,
   FLOAT,
   STRING,
@@ -25,6 +24,7 @@ pub enum TokenT {
   //Symbols
   EQUALS,
   ASSIGN,
+  DOLLAR,
 }
 
 impl TokenT {
@@ -44,13 +44,13 @@ impl TokenT {
         Regex::new(r"^[a-zA-Z_][a-zA-Z0-9_]*").unwrap(),
         TokenT::IDENTIFIER,
       )],
-      TokenT::BYTE => vec![(Regex::new(r"^b'[a-zA-Z0-9]'").unwrap(), TokenT::BYTE)],
       TokenT::INTEGER => vec![(Regex::new(r"^[0-9]+").unwrap(), TokenT::INTEGER)],
       TokenT::FLOAT => vec![(Regex::new(r"^[0-9]+\.[0-9]+").unwrap(), TokenT::FLOAT)],
       TokenT::STRING => vec![(Regex::new(r#"^"([^"]|\\")*""#).unwrap(), TokenT::STRING)],
 
       TokenT::EQUALS => vec![(Regex::new(r"^==").unwrap(), TokenT::EQUALS)],
       TokenT::ASSIGN => vec![(Regex::new(r"^(=|\\+=|-=|\\*=|/=)").unwrap(), TokenT::ASSIGN)],
+      TokenT::DOLLAR => vec![(Regex::new(r"^\$").unwrap(), TokenT::DOLLAR)],
     }
   }
 }
