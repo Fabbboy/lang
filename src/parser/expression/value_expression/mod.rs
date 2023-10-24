@@ -2,7 +2,7 @@ pub mod float_value;
 pub mod int_value;
 pub mod string_value;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum ValueExpression {
   Int(int_value::IntValue),
   Float(float_value::FloatValue),

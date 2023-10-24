@@ -1,6 +1,6 @@
 use crate::lexer::{codepos::CodePos, TokenT};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Token {
   pub token: TokenT,
   pub pos: CodePos,

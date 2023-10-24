@@ -37,6 +37,7 @@ impl Lexer {
         TokenT::STRING,
         TokenT::EQUALS,
         TokenT::ASSIGN,
+        TokenT::DOLLAR,
       ] {
         for (regex, t) in token_type.with_regex() {
           if let Some(m) = regex.find(source) {
