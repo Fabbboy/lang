@@ -202,12 +202,7 @@ impl Parser {
         )));
       }
       TokenT::TYPE => {
-        let value = self.parse_type();
-        if value.is_none() {
-          eprintln!("Error: Failed to parse type at {:?}", self.peek(0).pos);
-          return None;
-        }
-        return Some(value.unwrap());
+        return Some(Expression::Value(ValueExpression::Void));
       }
       TokenT::IDENTIFIER => {
         let value = self.peek(0).value.as_ref().unwrap().clone();

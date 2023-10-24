@@ -6,7 +6,7 @@ use parser::parser::Parser;
 
 fn main() {
   let mut lexer = Lexer::new();
-  lexer.lex("str asd = \"hello world\"");
+  lexer.lex("byte asd = 2");
 
   let mut parser = Parser::new(lexer.tokens);
   parser.parse();
