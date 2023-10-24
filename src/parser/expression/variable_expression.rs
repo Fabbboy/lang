@@ -1,6 +1,6 @@
 use super::Expression;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct VariableExpression {
   pub name: String,
   pub type_: Option<Box<Expression>>,

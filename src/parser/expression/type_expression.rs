@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Type {
   Byte,
   Int,
@@ -6,7 +6,7 @@ pub enum Type {
   String,
   Void,
 }
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct TypeExpression {
   pub type_: Type,
 }

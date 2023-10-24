@@ -1,6 +1,6 @@
 use crate::parser::expression::Expression;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AssignStatement {
   pub variable_expr: Expression,
   pub value_expr: Expression,

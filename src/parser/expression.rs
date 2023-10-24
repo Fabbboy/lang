@@ -2,7 +2,7 @@ pub mod type_expression;
 pub mod value_expression;
 pub mod variable_expression;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Expression {
   Value(value_expression::ValueExpression),
   Variable(variable_expression::VariableExpression),

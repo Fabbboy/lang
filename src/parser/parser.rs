@@ -154,9 +154,10 @@ impl Parser {
     };
 
     let mut variable_expr = Expression::Variable(VariableExpression::new(name.clone(), None));
-    if type_expr.is_some(){
+    if type_expr.is_some() {
       let type_expr = type_expr.unwrap();
-      variable_expr = Expression::Variable(VariableExpression::new(name, Some(Box::from(type_expr))));
+      variable_expr =
+        Expression::Variable(VariableExpression::new(name, Some(Box::from(type_expr))));
     }
 
     if !self.consume_if(TokenT::ASSIGN) {
@@ -223,7 +224,7 @@ impl Parser {
     }
   }
 
-  fn parse_re_assignment(&mut self) -> Option<Statement>{
+  fn parse_re_assignment(&mut self) -> Option<Statement> {
     let current_token = self.peek(0);
     let varname = current_token.value.as_ref().unwrap().clone();
     self.consume();
@@ -265,39 +266,91 @@ impl Parser {
   }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use crate::lexer::codepos::CodePos;
+  use crate::lexer::codepos::CodePos;
 
-    use super::*;
+  use super::*;
 
-    #[test]
-    fn test_parser_new() {
-        let tokens = vec![Token::new(TokenT::INTEGER, CodePos::zero(),Some("1".to_string()))];
-        let parser = Parser::new(tokens);
+  #[test]
+  fn test_parser_new() {
+    let tokens = vec![Token::new(
+      TokenT::INTEGER,
+      CodePos::zero(),
+      Some("1".to_string()),
+    )];
+    let parser = Parser::new(tokens);
 
-        assert_eq!(parser.pos, 0);
-        assert!(parser.module.statements.is_none());
-    }
+    assert_eq!(parser.pos, 0);
+    assert!(parser.module.statements.is_none());
+  }
 
-    #[test]
-    fn test_peek() {
-        let tokens = vec![Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string()))];
-        let parser = Parser::new(tokens.clone());
+  #[test]
+  fn test_peek() {
+    let tokens = vec![Token::new(
+      TokenT::INTEGER,
+      CodePos::zero(),
+      Some("1".to_string()),
+    )];
+    let parser = Parser::new(tokens.clone());
 
-        assert_eq!(parser.peek(0), tokens[0]);
-    }
+    assert_eq!(parser.peek(0), tokens[0]);
+  }
 
-    #[test]
-    fn test_consume() {
-        let tokens = vec![
-            Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string())),
-            Token::new(TokenT::INTEGER, CodePos::zero(), Some("2".to_string())),
-        ];
-        let mut parser = Parser::new(tokens.clone());
+  #[test]
+  fn test_consume() {
+    let tokens = vec![
+      Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string())),
+      Token::new(TokenT::INTEGER, CodePos::zero(), Some("2".to_string())),
+    ];
+    let mut parser = Parser::new(tokens.clone());
 
-        assert_eq!(parser.consume(), tokens[0]);
-        assert_eq!(parser.pos, 1);
-    }
+    assert_eq!(parser.consume(), tokens[0]);
+    assert_eq!(parser.pos, 1);
+  }
+
+  #[test]
+  fn test_assignment() {
+    let tokens = vec![
+      Token::new(TokenT::TYPE, CodePos::zero(), Some("int".to_string())),
+      Token::new(TokenT::IDENTIFIER, CodePos::zero(), Some("asd".to_string())),
+      Token::new(TokenT::ASSIGN, CodePos::zero(), None),
+      Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string())),
+    ];
+    let mut parser = Parser::new(tokens.clone());
+
+    parser.parse();
+    let stmt = parser.module.statements.as_ref().unwrap();
+    assert_eq!(
+      stmt[0],
+      Statement::Assign(AssignStatement::new(
+        Expression::Variable(VariableExpression::new(
+          "asd".to_string(),
+          Some(Box::from(Expression::Type(TypeExpression::new(Type::Int))))
+        )),
+        Expression::Value(ValueExpression::Int(IntValue::new(1))),
+        false,
+      ))
+    );
+  }
+
+  #[test]
+  fn test_reassigment() {
+    let tokens = vec![
+      Token::new(TokenT::IDENTIFIER, CodePos::zero(), Some("asd".to_string())),
+      Token::new(TokenT::ASSIGN, CodePos::zero(), None),
+      Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string())),
+    ];
+    let mut parser = Parser::new(tokens.clone());
+
+    let stmt = parser.parse_re_assignment().unwrap();
+    assert_eq!(
+      stmt,
+      Statement::Assign(AssignStatement::new(
+        Expression::Variable(VariableExpression::new("asd".to_string(), None)),
+        Expression::Value(ValueExpression::Int(IntValue::new(1))),
+        false,
+      ))
+    );
+  }
 }
