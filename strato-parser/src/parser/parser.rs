@@ -1,4 +1,4 @@
-use crate::lexer::{token::Token, TokenT};
+use strato_lexer::lexer::{codepos::CodePos, token::Token, TokenT};
 
 use super::{
   expression::{
@@ -268,7 +268,7 @@ impl Parser {
 
 #[cfg(test)]
 mod tests {
-  use crate::lexer::codepos::CodePos;
+  use strato_lexer::lexer::codepos::CodePos;
 
   use super::*;
 
