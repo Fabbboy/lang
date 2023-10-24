@@ -264,3 +264,40 @@ impl Parser {
     }
   }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::lexer::codepos::CodePos;
+
+    use super::*;
+
+    #[test]
+    fn test_parser_new() {
+        let tokens = vec![Token::new(TokenT::INTEGER, CodePos::zero(),Some("1".to_string()))];
+        let parser = Parser::new(tokens);
+
+        assert_eq!(parser.pos, 0);
+        assert!(parser.module.statements.is_none());
+    }
+
+    #[test]
+    fn test_peek() {
+        let tokens = vec![Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string()))];
+        let parser = Parser::new(tokens.clone());
+
+        assert_eq!(parser.peek(0), tokens[0]);
+    }
+
+    #[test]
+    fn test_consume() {
+        let tokens = vec![
+            Token::new(TokenT::INTEGER, CodePos::zero(), Some("1".to_string())),
+            Token::new(TokenT::INTEGER, CodePos::zero(), Some("2".to_string())),
+        ];
+        let mut parser = Parser::new(tokens.clone());
+
+        assert_eq!(parser.consume(), tokens[0]);
+        assert_eq!(parser.pos, 1);
+    }
+}
